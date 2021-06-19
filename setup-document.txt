@@ -1,0 +1,66 @@
+
+sudo nano /etc/systemd/system/namaste_ongole.service
+
+[Unit]
+Description=Namaste Ongole Service
+After=network.target
+
+[Service]
+User=ubuntu
+Group=ubuntu
+
+WorkingDirectory=/home/ubuntu/namaste_ongole
+ExecStart=/home/ubuntu/namaste_ongole/venv/bin/gunicorn -b 0.0.0.0:8000 --workers 3 --bind unix:/home/ubuntu/namaste_ongole/namaste_ongole.sock -m 007 namaste_ongole.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
+
+ sudo systemctl daemon-reload
+
+sudo systemctl stop namaste_ongole
+sudo systemctl start namaste_ongole
+sudo systemctl enable namaste_ongole
+sudo systemctl status namaste_ongole
+
+sudo nano /etc/nginx/sites-available/namaste_ongole
+
+server {
+    listen 80;
+    server_name namasteongole.com www.namasteongole.com;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /assets/ {
+        root /home/ubuntu/namaste_ongole/;
+    }
+
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/home/ubuntu/namaste_ongole/namaste_ongole.sock;
+    }
+}
+
+sudo ln -s /etc/nginx/sites-available/namaste_ongole /etc/nginx/sites-enabled
+sudo nginx -t
+sudo systemctl restart nginx
+
+namei -nom /home/ubuntu/namaste_ongole/namaste_ongole.sock
+sudo chmod 666 namaste_ongole.sock
+
+STATIC_URL = '/assets/'
+STATICFILES_DIR = [
+    Path(BASE_DIR, 'static')
+]
+
+STATIC_ROOT = '/home/ubuntu/namaste_ongole/assets'  # Path(BASE_DIR, 'assets')
+# STATIC_ROOT = Path(BASE_DIR, 'assets')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = Path(BASE_DIR, 'media')
+
+
+
+Username (leave blank to use 'ubuntu'): admin
+Email address: admin@namasteongole.com
+Password: P@SSword!@3
+Password (again): P@SSword!@3
+Superuser created successfully.
