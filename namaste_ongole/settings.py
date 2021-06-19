@@ -70,6 +70,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -208,8 +209,8 @@ STATICFILES_DIR = [
     Path(BASE_DIR, 'static')
 ]
 
-STATIC_ROOT = '/home/ubuntu/namaste_ongole/assets'  # Path(BASE_DIR, 'assets')
-# STATIC_ROOT = Path(BASE_DIR, 'assets')
+#STATIC_ROOT = '/home/ubuntu/namaste_ongole/assets'  # Path(BASE_DIR, 'assets')
+STATIC_ROOT = Path(BASE_DIR, 'assets')
 
 
 MEDIA_URL = '/media/'
