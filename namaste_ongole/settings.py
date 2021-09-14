@@ -17,6 +17,8 @@ from pathlib import Path
 from dotenv import load_dotenv
 load_dotenv()
 import environ
+import dj_database_url
+
 
 env = environ.Env(
     # set casting, default value
@@ -41,7 +43,8 @@ SECRET_KEY = 'ka2lurddl**i0v7sulf&8@0dgg1i)+flzh2by%!$q+!6x*p834'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 IMPORT_EXPORT_USE_TRANSACTIONS = False
-ALLOWED_HOSTS = ["*"]
+#ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 
 # FCM_DJANGO_SETTINGS = {
 #         "FCM_SERVER_KEY": env("FCM_SERVER_KEY")
@@ -70,6 +73,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -147,21 +151,33 @@ MIDDLEWARE_CLASSES = (
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+#     # 'default': {
+#     #     'ENGINE': 'django.db.backends.mysql',
+#     #     'NAME': env('DB_NAME'),
+#     #     'USER': env('DB_USER'),
+#     #     'PASSWORD': env('DB_PASSWORD'),
+#     #     'HOST': env('DB_HOST'),
+#     #     'PORT': env('DB_PORT'),
+#     # }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': '',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': 'localhost',
+        'PORT': '',
     }
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.mysql',
-    #     'NAME': env('DB_NAME'),
-    #     'USER': env('DB_USER'),
-    #     'PASSWORD': env('DB_PASSWORD'),
-    #     'HOST': env('DB_HOST'),
-    #     'PORT': env('DB_PORT'),
-    # }
 }
 
+db_from_env = dj_database_url.config(conn_max_age=500)
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -208,14 +224,14 @@ STATICFILES_DIR = [
     Path(BASE_DIR, 'static')
 ]
 
-STATIC_ROOT = '/home/ubuntu/namaste_ongole/assets'  # Path(BASE_DIR, 'assets')
-# STATIC_ROOT = Path(BASE_DIR, 'assets')
+#STATIC_ROOT = '/home/ubuntu/namaste_ongole/assets'  # Path(BASE_DIR, 'assets')
+STATIC_ROOT = Path(BASE_DIR, 'assets')
 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = Path(BASE_DIR, 'media')
 
-# django_heroku.settings(locals())
+#django_heroku.settings(locals())
 
 
 # # RAZORPAY_CONFIGURATION
